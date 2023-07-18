@@ -216,8 +216,10 @@ class GenericWaterHeater(WaterHeaterEntity, RestoreEntity):
 
     async def _async_control_heating(self):
         """Check if we need to turn heating on or off."""
-        if self._current_operation == STATE_OFF or self._current_temperature is None:
+        if self._current_temperature is None:
             pass
+        elif self._current_operation == STATE_OFF:
+            await self._async_heater_turn_off()
         elif (
             abs(self._current_temperature - self._target_temperature) > self._temperature_delta
         ):
